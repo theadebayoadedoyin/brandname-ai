@@ -2,21 +2,33 @@
 
 import { useEffect, useState } from "react";
 
+import Hero from "./components/Hero";
+import SearchForm from "./components/SearchForm";
+import LoadingOverlay from "./components/LoadingOverlay";
+import ResultCard, { BrandResult } from "./components/ResultCard";
 export default function Home() {
   const words = ["Find", "Generate", "Create", "Discover"];
 
   const loadingMessages = [
     "Understanding your business...",
-    "Analyzing your industry...",
-    "Crafting strategic brand names...",
-    "Preparing your results...",
+    "Identifying your positioning...",
+    "Exploring naming directions...",
+    "Testing memorability...",
+    "Crafting excellent recommendations...",
   ];
 
   const [currentWord, setCurrentWord] = useState(0);
-  const [showResults, setShowResults] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [loadingStep, setLoadingStep] = useState(0);
 
+  const [description, setDescription] = useState("");
+  const [keywords, setKeywords] = useState("");
+
+  const [results, setResults] = useState<BrandResult[]>([]);
+
+  const [showResults, setShowResults] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [loadingStep, setLoadingStep] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWord((prev) => (prev + 1) % words.length);
@@ -43,17 +55,21 @@ export default function Home() {
     <main className="min-h-screen bg-gray-50">
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-md">
-          <div className="w-full max-w-md rounded-3xl bg-white p-10 shadow-2xl">
+          <div className="w-full max-w-sm rounded-3xl bg-white p-7 shadow-2xl">
 
-            <p className="text-center text-sm font-semibold uppercase tracking-[0.2em] text-gray-400">
-              BrandName AI
-            </p>
-
-            <h2 className="mt-6 text-center font-display text-3xl text-gray-900">
-              {loadingMessages[loadingStep]}
-            </h2>
-
-            <div className="mt-10 h-2 overflow-hidden rounded-full bg-gray-200">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-400">
+  BrandName AI
+</p>
+            <p className="mt-2 text-center text-sm text-gray-500">
+  Please wait while we create strategic brand names.
+</p>
+<h2 className="mt-3 text-lg font-medium leading-relaxed text-gray-900">
+  {loadingMessages[loadingStep]}
+</h2>
+<p className="mt-4 text-sm text-gray-500">
+  This usually takes just a few seconds.
+</p>
+<div className="mt-6 h-1.5 overflow-hidden rounded-full bg-gray-200">
               <div
                 className="h-full rounded-full bg-violet-600 transition-all duration-700"
                 style={{
@@ -88,9 +104,9 @@ export default function Home() {
         </p>
 
         <div className="mt-8 flex flex-wrap gap-8 text-sm text-gray-500">
-          <span>✓ Strategic naming</span>
-          <span>✓ AI explanations</span>
-          <span>✓ Built for founders</span>
+          <span> Strategic naming</span>
+          <span> Humane explanations</span>
+          <span> Built for founders</span>
         </div>
 
         <div className="mt-16 rounded-3xl border border-gray-200 bg-white p-10 shadow-xl">
@@ -165,14 +181,40 @@ export default function Home() {
 
             <button
               type="button"
-              onClick={() => {
+              onClick={async () => {
                 setShowResults(false);
                 setIsLoading(true);
+              
+                try {
+                  const response = await fetch("/api/generate", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      description:
+                        "We help businesses build memorable brands through strategic design.",
+                      industry: "Creative Agency",
+                      keywords: "modern, premium, memorable",
+                    }),
+                  });
+              
+                  const data = await response.json();
 
-                setTimeout(() => {
-                  setIsLoading(false);
+const parsed: BrandResult[] = JSON.parse(data.response);
+
+setResults(parsed);
+console.log(parsed);             
+                  console.log(data);
+              
+                
+              
                   setShowResults(true);
-                }, 2800);
+                } catch (error) {
+                  console.error(error);
+                } finally {
+                  setIsLoading(false);
+                }
               }}
               className="w-full rounded-xl bg-black py-4 text-lg font-semibold text-white transition duration-300 hover:scale-[1.01] hover:bg-gray-900"
             >
@@ -183,76 +225,22 @@ export default function Home() {
         </div>
 
         {showResults && (
-          <div className="mt-12 animate-[fadeIn_.5s_ease] space-y-6">
+  <div className="mt-16 space-y-6">
+    <h2 className="font-display text-3xl text-gray-900">
+      Suggested Brand Names
+    </h2>
 
-            <h2 className="font-display text-3xl text-gray-900">
-              Suggested Brand Names
-            </h2>
+    <p className="text-gray-600">
+      Here are strategic names generated for your business.
+    </p>
 
-            <p className="text-gray-600">
-              Here are strategic names generated for your business.
-            </p>
-
-            <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-xl">
-            <div className="flex items-center justify-between">
-
-<h3 className="font-display text-4xl text-gray-900">
-  Lumora
-</h3>
-
-<span className="rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
-  Excellent
-</span>
-
-</div>
-
-<div className="mt-8 space-y-8">
-
-<div>
-  <h4 className="text-sm font-semibold uppercase tracking-[0.15em] text-gray-500">
-    Why it works
-  </h4>
-
-  <p className="mt-3 leading-8 text-gray-700">
-    Lumora combines the ideas of light, clarity and innovation.
-    It feels premium, memorable and modern while remaining easy
-    to pronounce across different markets.
-  </p>
-</div>
-
-<div>
-  <h4 className="text-sm font-semibold uppercase tracking-[0.15em] text-gray-500">
-    Brand Personality
-  </h4>
-
-  <div className="mt-4 flex flex-wrap gap-3">
-
-    <span className="rounded-full bg-gray-100 px-4 py-2 text-sm">
-      Modern
-    </span>
-
-    <span className="rounded-full bg-gray-100 px-4 py-2 text-sm">
-      Premium
-    </span>
-
-    <span className="rounded-full bg-gray-100 px-4 py-2 text-sm">
-      Innovative
-    </span>
-
+    {results.map((result, index) => (
+      <ResultCard
+        key={index}
+        result={result}
+      />
+    ))}
   </div>
-</div>
-
-<button
-  className="rounded-xl border border-gray-300 px-6 py-3 font-medium transition hover:bg-gray-100"
->
-  Copy Name
-</button>
-
-</div>
-
-</div>
-
-</div>
 )}
 
 </div>
