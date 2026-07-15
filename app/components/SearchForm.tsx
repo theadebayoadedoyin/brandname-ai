@@ -31,12 +31,12 @@ export default function SearchForm({
           </label>
 
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={6}
-            placeholder="Example: We create premium Christian apparel that helps young believers wear their faith confidently."
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-black focus:outline-none"
-          />
+  value={description}
+  onChange={(e) => setDescription(e.target.value)}
+  rows={6}
+  placeholder="Example: We create premium Christian apparel that helps young believers wear their faith confidently."
+  className="w-full rounded-2xl border border-gray-300 bg-white p-4 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+/>
 
           <p className="mt-2 text-sm text-gray-500">
             The more specific your description, the better the names.
@@ -53,6 +53,7 @@ export default function SearchForm({
             onChange={(e) => setKeywords(e.target.value)}
             placeholder="faith, premium, modern"
             className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-black focus:outline-none"
+            focus:ring-2 focus:ring-blue-500/20
           />
 
           <p className="mt-2 text-sm text-gray-500">

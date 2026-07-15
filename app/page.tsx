@@ -21,6 +21,7 @@ export default function Home() {
 
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState("");
+  const [industry, setIndustry] = useState("");
 
   const [results, setResults] = useState<BrandResult[]>([]);
 
@@ -125,10 +126,12 @@ export default function Home() {
               </div>
 
               <textarea
-                rows={5}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-violet-500 focus:outline-none"
-                placeholder="e.g. We help small businesses build memorable brands through strategic design and AI..."
-              />
+  rows={5}
+  value={description}
+  onChange={(e) => setDescription(e.target.value)}
+  className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-violet-500 focus:outline-none"
+  placeholder="e.g. We create premium Christian apparel that helps young believers wear their faith confidently."
+/>
             </div>
 
             <div>
@@ -142,20 +145,23 @@ export default function Home() {
                 </p>
               </div>
 
-              <select className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-violet-500 focus:outline-none">
-                <option>Select Industry</option>
-                <option>Technology / SaaS</option>
-                <option>Web3 / Blockchain</option>
-                <option>Fashion</option>
-                <option>Beauty</option>
-                <option>Finance</option>
-                <option>Food & Beverage</option>
-                <option>Health & Wellness</option>
-                <option>Education</option>
-                <option>E-commerce</option>
-                <option>Creative Agency</option>
-                <option>Other</option>
-              </select>
+              <select
+  value={industry}
+  onChange={(e) => setIndustry(e.target.value)}
+  className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-violet-500 focus:outline-none"
+>
+  <option value="">Select Industry</option>
+  <option value="Fashion">Fashion</option>
+  <option value="Law">Law</option>
+  <option value="Technology">Technology</option>
+  <option value="Healthcare">Healthcare</option>
+  <option value="Education">Education</option>
+  <option value="Creative Agency">Creative Agency</option>
+  <option value="Finance">Finance</option>
+  <option value="Hospitality">Hospitality</option>
+  <option value="Real Estate">Real Estate</option>
+  <option value="Other">Other</option>
+</select>
             </div>
 
             <div>
@@ -173,10 +179,12 @@ export default function Home() {
               </div>
 
               <input
-                type="text"
-                placeholder="Luxury, modern, bold..."
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-violet-500 focus:outline-none"
-              />
+  type="text"
+  value={keywords}
+  onChange={(e) => setKeywords(e.target.value)}
+  placeholder="Luxury, modern, bold..."
+  className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-violet-500 focus:outline-none"
+/>
             </div>
 
             <button
@@ -184,7 +192,12 @@ export default function Home() {
               onClick={async () => {
                 setShowResults(false);
                 setIsLoading(true);
-              
+
+                console.log({
+                  description,
+                  keywords,
+                });
+                
                 try {
                   const response = await fetch("/api/generate", {
                     method: "POST",
@@ -192,11 +205,10 @@ export default function Home() {
                       "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                      description:
-                        "We help businesses build memorable brands through strategic design.",
-                      industry: "Creative Agency",
-                      keywords: "modern, premium, memorable",
-                    }),
+                      description,
+                      industry,
+                      keywords,
+                    })
                   });
               
                   const data = await response.json();

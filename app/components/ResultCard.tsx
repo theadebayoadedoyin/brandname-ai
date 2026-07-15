@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
+
 export type BrandResult = {
   name: string;
+  style: string;
   reason: string;
   personality: string[];
 };
@@ -13,6 +16,9 @@ type ResultCardProps = {
 export default function ResultCard({
   result,
 }: ResultCardProps) {
+
+  const [copied, setCopied] = useState(false);
+
   return (
     <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-lg transition hover:shadow-xl">
 
@@ -23,6 +29,10 @@ export default function ResultCard({
           <h3 className="font-display text-2xl text-gray-900">
             {result.name}
           </h3>
+
+          <p className="mt-2 text-sm font-medium uppercase tracking-wide text-violet-600">
+  {result.style}
+</p>
 
           <p className="mt-4 leading-7 text-gray-600">
             {result.reason}
@@ -42,11 +52,19 @@ export default function ResultCard({
         </div>
 
         <button
-          onClick={() => navigator.clipboard.writeText(result.name)}
-          className="rounded-xl border border-gray-300 px-5 py-2 text-sm font-medium transition hover:bg-gray-100"
-        >
-          Copy
-        </button>
+  onClick={() => {
+    navigator.clipboard.writeText(result.name);
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  }}
+  className="rounded-xl border border-gray-300 px-6 py-3 font-medium transition hover:bg-gray-100"
+>
+  {copied ? "✓ Copied!" : "Copy Name"}
+</button>
 
       </div>
 

@@ -9,44 +9,112 @@ export async function POST(request: Request) {
     const { description, industry, keywords } = await request.json();
 
     const prompt = `
-You are a senior brand strategist.
+You are a world-class Brand Naming Strategist.
 
-Your task is to generate exactly 5 strategic brand names.
+You have over 20 years of experience naming companies, startups, luxury brands, law firms, fashion labels, churches, nonprofits, fintech companies, AI products, SaaS businesses, consulting firms, restaurants, beauty brands, healthcare companies and consumer products.
 
-The names must be:
-- memorable
-- easy to pronounce
-- distinctive
+You NEVER generate names immediately.
+
+Before producing any answer, think through this process internally.
+
+STEP 1
+Understand what the business actually does.
+
+STEP 2
+Infer the industry if it is not explicitly provided.
+
+STEP 3
+Identify the likely audience.
+
+STEP 4
+Determine the positioning.
+
+Examples:
+
+- luxury
 - premium
-- suitable for modern startups
-- not generic
-- avoid obvious names like TechNova, Brandify, Innovix, etc.
+- affordable
+- youthful
+- corporate
+- faith-based
+- playful
+- elegant
+- modern
+- heritage
+- disruptive
+- innovative
 
-Business Description:
+STEP 5
+Determine the best naming direction.
+
+Possible naming styles include:
+
+- Invented
+- Evocative
+- Metaphorical
+- Founder-inspired
+- Compound
+- Classical
+- Latin-inspired
+- Minimal
+- Descriptive
+- Abstract
+
+Choose the ONE style that best fits the business.
+
+STEP 6
+
+Brainstorm at least 20 possible names internally.
+
+Reject weak names.
+
+Reject names that sound generic.
+
+Reject names that do not match the positioning.
+
+Reject names that could fit any business.
+
+Only keep the strongest five.
+
+Rules
+
+• Every name must feel intentional.
+• Every explanation must reference THIS business.
+• Never explain another industry.
+• Avoid generic AI names like TechNova, Brandify, Innovix, Nexify, Lumora, Velora unless they genuinely fit.
+• Mix short and long names.
+• Prefer names that are memorable.
+• Prefer names that are pronounceable.
+• Prefer names that can become premium brands.
+• Avoid obvious clichés.
+• Make every result feel like it came from a professional naming consultancy.
+
+Business Description
+
 ${description}
 
-Industry:
-${industry}
+Industry
 
-Keywords:
-${keywords}
+${industry || "Infer from the business description."}
 
-For every suggestion provide:
+Keywords
 
-Name:
-Why it works:
-Brand Personality:
-- word 1
-- word 2
-- word 3
+${keywords || "None"}
 
-Return ONLY valid JSON in this format:
+Return ONLY valid JSON.
+
+Format:
 
 [
   {
     "name": "",
+    "style": "",
     "reason": "",
-    "personality": []
+    "personality": [
+      "",
+      "",
+      ""
+    ]
   }
 ]
 `;
