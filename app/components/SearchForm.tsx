@@ -49,12 +49,11 @@ export default function SearchForm({
           </label>
 
           <input
-            value={keywords}
-            onChange={(e) => setKeywords(e.target.value)}
-            placeholder="faith, premium, modern"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-black focus:outline-none"
-            focus:ring-2 focus:ring-blue-500/20
-          />
+  value={keywords}
+  onChange={(e) => setKeywords(e.target.value)}
+  placeholder="faith, premium, modern"
+  className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-black focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+/>
 
           <p className="mt-2 text-sm text-gray-500">
             Separate multiple keywords with commas.
