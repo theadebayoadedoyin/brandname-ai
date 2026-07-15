@@ -38,11 +38,11 @@ export default function ResultCard({
             {result.reason}
           </p>
 
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-5 flex flex-wrap gap-3">
             {result.personality.map((trait) => (
               <span
                 key={trait}
-                className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700"
+               className="inline-flex items-center rounded-full bg-violet-100 px-4 py-2 text-sm font-medium text-violet-700 dark:bg-violet-700 dark:text-white"
               >
                 {trait}
               </span>
@@ -61,9 +61,13 @@ export default function ResultCard({
       setCopied(false);
     }, 2000);
   }}
-  className="rounded-xl border border-gray-300 px-6 py-3 font-medium transition hover:bg-gray-100"
+  className={`rounded-xl px-6 py-3 font-medium text-white transition duration-200 active:scale-95 ${
+    copied
+      ? "bg-green-600 hover:bg-green-700"
+      : "bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-400"
+  }`}
 >
-  {copied ? "✓ Copied!" : "Copy Name"}
+{copied ? "✓ Copied" : "Copy Name"}
 </button>
 
       </div>
