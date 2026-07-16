@@ -309,7 +309,7 @@ console.log(parsed);
 
         {showResults && (
   <div className="mt-16 space-y-6">
-    <h2 className="font-display text-4xl text-foreground">
+    <h2 className="font-display text-4xl text-gray-900 dark:text-white">
   Suggested Brand Names
 </h2>
 
