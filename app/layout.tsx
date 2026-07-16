@@ -16,8 +16,13 @@ const dmSerif = DM_Serif_Display({
 
 export const metadata: Metadata = {
   title: "BrandName AI | Generate Strategic Brand Names",
+
   description:
     "Generate memorable, strategic brand names with thoughtful explanations—not random AI suggestions. Built for founders, startups, and creators.",
+
+  metadataBase: new URL("https://brandname-ai-six.vercel.app"),
+
+  applicationName: "BrandName AI",
 
   keywords: [
     "Brand Name Generator",
@@ -36,12 +41,37 @@ export const metadata: Metadata = {
 
   creator: "Adebayo Adedoyin",
 
+  robots: {
+    index: true,
+    follow: true,
+  },
+  
   openGraph: {
     title: "BrandName AI",
     description:
-  "Generate memorable, strategic brand names with thoughtful AI explanations. Built for founders, startups and creators.",
+      "Generate memorable, strategic brand names with thoughtful AI explanations. Built for founders, startups and creators.",
+
+    url: "https://brandname-ai-six.vercel.app",
+    siteName: "BrandName AI",
+
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "BrandName AI",
+      },
+    ],
 
     type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "BrandName AI",
+    description:
+      "Generate memorable, strategic brand names with thoughtful AI explanations.",
+    images: ["/opengraph-image.png"],
   },
 };
 

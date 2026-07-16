@@ -331,7 +331,7 @@ console.log(parsed);
 <div className="mt-12 flex flex-col items-center gap-4 border-t border-gray-200 pt-8 text-center dark:border-zinc-800">
 
 <p className="text-sm text-gray-500 dark:text-gray-400">
-  Helping founders build brands people remember.
+Helping founders build memorable brands.
 </p>
 
 <div className="flex gap-6 text-sm">
@@ -358,7 +358,7 @@ console.log(parsed);
 </div>
 
 <p className="text-xs text-gray-400">
-  © 2026 BrandName AI · Built by Adebayo Adedoyin
+  © 2026 BrandName AI · Designed & Built by Adebayo Adedoyin
 </p>
 
 </div>
