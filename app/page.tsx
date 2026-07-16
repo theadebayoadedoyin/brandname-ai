@@ -186,7 +186,7 @@ export default function Home() {
           <form className="space-y-8">
           <div>
               <div className="mb-3">
-                <label className="block text-base font-semibold text-gray-900">
+                <label className="block text-base font-semibold text-gray-900 dark:text-white">
                   Business Description
                 </label>
 
@@ -207,9 +207,9 @@ export default function Home() {
 
             <div>
               <div className="mb-3">
-                <label className="block text-base font-semibold text-gray-900">
-                  Industry
-                </label>
+              <label className="block text-base font-semibold text-gray-900 dark:text-white">
+  Industry
+</label>
 
                 <p className="mt-1 text-sm leading-6 text-gray-500">
                   Choose the industry your business belongs to.
@@ -237,9 +237,9 @@ export default function Home() {
 
             <div>
               <div className="mb-3">
-                <label className="block text-base font-semibold text-gray-900">
+                <label className="block text-base font-semibold text-gray-900 dark:text-white">
                   Keywords
-                  <span className="ml-1 font-normal text-gray-500">
+                  <span className="ml-1 font-normal text-gray-500 ">
                     (Optional)
                   </span>
                 </label>
