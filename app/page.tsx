@@ -316,7 +316,15 @@ console.log(parsed);
 <p className="mt-3 text-gray-600 dark:text-gray-300">
   Here are strategic names generated for your business.
 </p>
-
+<div className="mt-6 rounded-2xl border border-violet-200 bg-violet-50 p-5 dark:border-violet-800 dark:bg-violet-950/30">
+  <p className="text-sm leading-6 text-violet-900 dark:text-violet-200">
+    <span className="font-semibold">A quick note on the domain flags below:</span>{" "}
+    a taken .com doesn&apos;t always mean a name is off-limits. Two businesses in
+    completely different industries can often use the same name without any real
+    conflict. The flags just mean &quot;worth a 2-minute manual search before you
+    commit&quot; — not &quot;don&apos;t use this.&quot;
+  </p>
+</div>
     {results.map((result, index) => (
       <ResultCard
         key={index}
