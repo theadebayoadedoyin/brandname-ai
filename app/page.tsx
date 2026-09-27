@@ -221,17 +221,26 @@ export default function Home() {
   onChange={(e) => setIndustry(e.target.value)}
   className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 dark:bg-gray-800 dark:text-white focus:border-violet-500 focus:outline-none"
 >
-  <option value="">Select Industry</option>
-  <option value="Fashion">Fashion</option>
-  <option value="Law">Law</option>
-  <option value="Technology">Technology</option>
-  <option value="Healthcare">Healthcare</option>
-  <option value="Education">Education</option>
-  <option value="Creative Agency">Creative Agency</option>
-  <option value="Finance">Finance</option>
-  <option value="Hospitality">Hospitality</option>
-  <option value="Real Estate">Real Estate</option>
-  <option value="Other">Other</option>
+<option value="">Select Industry</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Law">Law</option>
+          <option value="Technology">Technology</option>
+          <option value="Healthcare">Healthcare</option>
+          <option value="Education">Education</option>
+          <option value="Creative Agency">Creative Agency</option>
+          <option value="Finance">Finance</option>
+          <option value="Hospitality">Hospitality</option>
+          <option value="Real Estate">Real Estate</option>
+          <option value="Food & Beverage">Food & Beverage</option>
+          <option value="Fitness & Wellness">Fitness & Wellness</option>
+          <option value="Agriculture & Agritech">Agriculture & Agritech</option>
+          <option value="E-commerce & Retail">E-commerce & Retail</option>
+          <option value="Logistics & Transportation">Logistics & Transportation</option>
+          <option value="Media & Entertainment">Media & Entertainment</option>
+          <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+          <option value="Nonprofit & Faith-Based">Nonprofit & Faith-Based</option>
+          <option value="Consulting & Professional Services">Consulting & Professional Services</option>
+          <option value="Other">Other</option>
 </select>
             </div>
 

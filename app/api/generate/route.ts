@@ -100,6 +100,11 @@ Reject any name that is already a known, existing brand, product, or
 company in ANY industry, even if that industry is different from this
 business. If you are unsure whether a name already exists, do not use it.
 
+NEVER suggest any of the following names under any circumstances — each has
+been manually confirmed as a real, existing brand or company:
+Moniker, Foundry, Stance, Kith, Archetype, Ontology, Nominalist, Nomina,
+Stet, Vowel, Vera, Alias, Caption, Semantic.
+
 Only keep the strongest five.
 
 Rules
