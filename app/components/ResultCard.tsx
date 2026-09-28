@@ -38,6 +38,10 @@ export default function ResultCard({ result }: ResultCardProps) {
   };
 
   const trust = result.trustLevel ? trustStyles[result.trustLevel] : null;
+  const q = encodeURIComponent(result.name);
+  const usptoUrl = `https://tmsearch.uspto.gov/search/search-information?searchText=${q}`;
+  const tmviewUrl = `https://www.tmdn.org/tmview/#/tmview/results?criteria=${q}`;
+  const linkClass = "text-violet-600 underline underline-offset-2 hover:text-violet-700 dark:text-violet-400";
 
   return (
     <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-lg transition hover:shadow-xl dark:border-zinc-700 dark:bg-zinc-900">
@@ -68,6 +72,12 @@ export default function ResultCard({ result }: ResultCardProps) {
               {result.domainNote}
             </p>
           )}
+
+<div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+  <a href={usptoUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>Check USPTO (US)</a>
+  <a href={tmviewUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>Check TMView (Global)</a>
+  <a href="https://pre.cac.gov.ng/home" target="_blank" rel="noopener noreferrer" className={linkClass}>Check CAC (Nigeria)</a>
+</div>
 
           <div className="mt-5 flex flex-wrap gap-3">
             {result.personality.map((trait) => (
