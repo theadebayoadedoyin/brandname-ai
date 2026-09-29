@@ -19,7 +19,7 @@ export default function LoadingOverlay({
         </div>
 
         <h3 className="text-center text-lg font-semibold text-gray-900">
-          BrandName AI
+          LexioMark
         </h3>
 
         <p className="mt-3 text-center text-gray-600">

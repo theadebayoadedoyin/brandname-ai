@@ -15,14 +15,14 @@ const dmSerif = DM_Serif_Display({
 
 
 export const metadata: Metadata = {
-  title: "BrandName AI | Generate Strategic Brand Names",
+  title: "LexioMark | Generate Strategic Brand Names",
 
   description:
     "Generate memorable, strategic brand names with thoughtful explanations—not random AI suggestions. Built for founders, startups, and creators.",
 
   metadataBase: new URL("https://brandname-ai-six.vercel.app"),
 
-  applicationName: "BrandName AI",
+  applicationName: "LexioMark",
 
   keywords: [
     "Brand Name Generator",
@@ -47,19 +47,19 @@ export const metadata: Metadata = {
   },
   
   openGraph: {
-    title: "BrandName AI",
+    title: "LexioMark",
     description:
       "Generate memorable, strategic brand names with thoughtful AI explanations. Built for founders, startups and creators.",
 
     url: "https://brandname-ai-six.vercel.app",
-    siteName: "BrandName AI",
+    siteName: "LexioMark",
 
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "BrandName AI",
+        alt: "LexioMark",
       },
     ],
 
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "BrandName AI",
+    title: "LexioMark",
     description:
       "Generate memorable, strategic brand names with thoughtful AI explanations.",
     images: ["/opengraph-image.png"],

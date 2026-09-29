@@ -17,7 +17,7 @@ export default function Hero() {
   return (
     <>
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
-        BrandName AI
+        LexioMark
       </p>
 
       <h1 className="mt-6 font-display text-5xl leading-tight tracking-tight text-gray-900 md:text-7xl">

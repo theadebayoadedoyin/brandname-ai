@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import Hero from "./components/Hero";
-import SearchForm from "./components/SearchForm";
-import LoadingOverlay from "./components/LoadingOverlay";
 import ResultCard, { BrandResult } from "./components/ResultCard";
 export default function Home() {
   const words = ["Find", "Generate", "Create", "Discover"];
@@ -22,6 +19,9 @@ export default function Home() {
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState("");
   const [industry, setIndustry] = useState("");
+
+  const [region, setRegion] = useState("");
+const [level, setLevel] = useState("Suggestive");
 
   const [results, setResults] = useState<BrandResult[]>([]);
 
@@ -53,13 +53,13 @@ export default function Home() {
   }, [isLoading]);
 
   return (
-    <main className="min-h-screen bg-white dark:bg-zinc-950 transition-colors">
+    <main className="min-h-screen overflow-x-hidden bg-white dark:bg-zinc-950 transition-colors">
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-md">
           <div className="w-full max-w-sm rounded-3xl bg-white p-7 shadow-2xl">
 
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-400">
-  BrandName AI
+  LexioMark
 </p>
             <p className="mt-2 text-center text-sm text-gray-500">
   Please wait while we create strategic brand names.
@@ -84,13 +84,13 @@ export default function Home() {
         </div>
       )}
 
-      <div className="mx-auto max-w-5xl px-6 py-20">
+      <div className="mx-auto max-w-5xl px-6 py-12 md:py-20">
 
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
-          BrandName AI
+          LexioMark
         </p>
 
-        <h1 className="mt-6 font-display text-5xl leading-tight tracking-tight text-gray-900 dark:text-white md:text-7xl">
+        <h1 className="mt-6 font-display text-4xl sm:text-5xl md:text-7xl break-words leading-tight tracking-tight text-gray-900 dark:text-white md:text-7xl">
           <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-red-400 bg-clip-text text-transparent">
             {words[currentWord]}
           </span>{" "}
@@ -119,7 +119,7 @@ export default function Home() {
         <section className="mt-24">
   <div className="text-center">
     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">
-      Why BrandName AI
+      Why LexioMark
     </p>
 
     <h2 className="mt-3 font-display text-4xl text-gray-900 dark:text-white">
@@ -129,7 +129,7 @@ export default function Home() {
     </h2>
 
     <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-300">
-      BrandName AI doesn't generate random names.
+      LexioMark doesn't generate random names.
       It thinks like a brand strategist before making recommendations.
     </p>
   </div>
@@ -180,7 +180,7 @@ export default function Home() {
 </section>
         <div
   id="generator"
-  className="mt-16 rounded-3xl border border-gray-200 bg-white p-10 shadow-xl dark:border-gray-700 dark:bg-slate-900"
+  className="mt-16 rounded-3xl border border-gray-200 bg-white p-6 md:p-10 shadow-xl dark:border-gray-700 dark:bg-slate-900"
 >
 
           <form className="space-y-8">
@@ -266,7 +266,28 @@ export default function Home() {
   className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 focus:border-violet-500 focus:outline-none"
 />
             </div>
+            <div>
+  <label className="block text-base font-semibold text-gray-900 dark:text-white">
+    Region <span className="font-normal text-gray-500">(Optional)</span>
+  </label>
+  <input type="text" value={region}
+    onChange={(e) => setRegion(e.target.value)}
+    placeholder="Country or region, e.g. Kenya"
+    className="mt-3 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 dark:bg-gray-800 dark:text-white focus:border-violet-500 focus:outline-none" />
+</div>
 
+<div>
+  <label className="block text-base font-semibold text-gray-900 dark:text-white">
+    How should the name relate to your business?
+  </label>
+  <select value={level} onChange={(e) => setLevel(e.target.value)}
+    className="mt-3 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 dark:bg-gray-800 dark:text-white focus:border-violet-500 focus:outline-none">
+    <option value="Direct">Direct: says what I do</option>
+    <option value="Suggestive">Suggestive: hints at what I do</option>
+    <option value="Conceptual">Conceptual: carries an idea or feeling</option>
+    <option value="Abstract">Abstract: distinctive, meaning built later</option>
+  </select>
+</div>
             <button
               type="button"
               onClick={async () => {
@@ -288,11 +309,16 @@ export default function Home() {
                       description,
                       industry,
                       keywords,
+                      region,
+                      level,
                     })
                   });
               
                   const data = await response.json();
-
+                  if (!response.ok || data.error) {
+                    alert("The AI is busy right now. Please try again in a moment.");
+                    return;
+                  }
 const parsed: BrandResult[] = JSON.parse(data.response);
 
 setResults(parsed);
@@ -375,7 +401,7 @@ Helping founders build memorable brands.
 </div>
 
 <p className="text-xs text-gray-400">
-  © 2026 BrandName AI · Designed & Built by Adebayo Adedoyin
+  © 2026 LexioMark · Designed & Built by Adebayo Adedoyin
 </p>
 
 </div>

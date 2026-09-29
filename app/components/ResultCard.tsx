@@ -7,9 +7,11 @@ export type BrandResult = {
   style: string;
   reason: string;
   personality: string[];
+  confidence?: string;
+  domainCheckFailed?: boolean;
   domains?: {
     com: { domain: string; available: boolean };
-    co: { domain: string; available: boolean };
+    co: { domain: string; available: boolean; checked?: boolean };
   };
   trustLevel?: "safe" | "caution" | "risky";
   domainNote?: string;
@@ -35,19 +37,27 @@ export default function ResultCard({ result }: ResultCardProps) {
       badge: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400",
       label: "⚠ .com and .co taken — worth checking",
     },
+    unknown: {
+      badge: "bg-gray-100 text-gray-700 dark:bg-zinc-800 dark:text-gray-300",
+      label: "Check availability manually",
+    },
   };
 
-  const trust = result.trustLevel ? trustStyles[result.trustLevel] : null;
+  const trust = result.domainCheckFailed
+    ? trustStyles.unknown
+    : result.trustLevel
+    ? trustStyles[result.trustLevel]
+    : null;
   const q = encodeURIComponent(result.name);
   const usptoUrl = `https://tmsearch.uspto.gov/search/search-information?searchText=${q}`;
   const tmviewUrl = `https://www.tmdn.org/tmview/#/tmview/results?criteria=${q}`;
   const linkClass = "text-violet-600 underline underline-offset-2 hover:text-violet-700 dark:text-violet-400";
 
   return (
-    <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-lg transition hover:shadow-xl dark:border-zinc-700 dark:bg-zinc-900">
+    <div className="rounded-3xl border border-gray-200 bg-white p-5 sm:p-8 shadow-lg transition hover:shadow-xl dark:border-zinc-700 dark:bg-zinc-900">
       <div className="flex items-start justify-between gap-6">
-        <div className="flex-1">
-          <h3 className="font-display text-2xl text-gray-900 dark:text-white">
+      <div className="min-w-0 flex-1">
+      <h3 className="break-words font-display text-2xl text-gray-900 dark:text-white">
             {result.name}
           </h3>
 
@@ -66,6 +76,12 @@ export default function ResultCard({ result }: ResultCardProps) {
           <p className="mt-4 leading-7 text-gray-600 dark:text-gray-300">
             {result.reason}
           </p>
+
+          {result.confidence === "low" && (
+            <p className="mt-3 text-sm leading-6 text-amber-700 dark:text-amber-400">
+              Meaning not fully verified. Please confirm any local-word meaning before using this name.
+            </p>
+          )}
 
           {result.domainNote && (
             <p className="mt-3 text-sm leading-6 text-gray-500 dark:text-gray-400">
