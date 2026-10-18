@@ -254,8 +254,9 @@ async function generateCandidates(prompt: string): Promise<Candidate[] | null> {
     text = await callGemini(MODEL, prompt, 3);
   }
   const FALLBACK = process.env.GEMINI_FALLBACK_MODEL;
-if (text === null && FALLBACK && FALLBACK !== MODEL && FALLBACK !== NAME_MODEL) {
-  text = await callGemini(FALLBACK, prompt, 2);
+  if (text === null && FALLBACK && FALLBACK !== MODEL && FALLBACK !== NAME_MODEL) {
+    text = await callGemini(FALLBACK, prompt, 2);
+  }
   if (text === null) return null;
   const parsed = parseJson<Candidate[]>(text);
   return Array.isArray(parsed)
