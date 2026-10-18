@@ -85,6 +85,7 @@ Rules:
 - REGION: when brief.region.value is set, at least 3 names must draw on that region's own languages, places or culture, not only Latin or Greek roots, and each of those reasons must say how. Follow the confidence and honesty rules for any local word.
 - LOCAL WORD SAFETY: reject a local-language word only if, spoken aloud, it sounds like a vulgar, offensive or insulting word in everyday use. Ordinary homophones and shared meanings are fine, because context resolves them. If you are unsure of a word's meaning, set confidence to "low".
 - STYLE MIX: across the {count} names, no single style (for example Blend) may appear more than 3 times. Mix in other styles such as Suggestive, Geography-inspired, Founder-inspired or Abstract where they fit.
+- PLACE CAP: at most 2 of the {count} names may contain a place name (a state, city or region). The rest must stand without a place name.
 - PLACE LIMITS: if a name is built from one town or state, say in its reason that it may limit growth beyond that place.
 - SENSE CHECK: before keeping a name, ask what a stranger would think it means. Reject it if it implies a different industry (for example a loan-sounding name for a law firm) or a wrong benefit.
 - HONEST REASONS: state the real origin of the name. Never invent a meaning, etymology or word-part that is not really there. If you are not sure a foreign word means what you claim, set confidence to "low" or drop the name.
