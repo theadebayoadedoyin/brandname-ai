@@ -205,7 +205,8 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 async function callGemini(
   model: string,
   contents: string,
-  tries = 3
+  tries = 3,
+  timeoutMs = 30000
 ): Promise<string | null> {
   for (let i = 0; i < tries; i++) {
     try {
@@ -216,7 +217,7 @@ async function callGemini(
           config: { responseMimeType: "application/json" },
         }),
         new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("timeout")), 45000)
+          setTimeout(() => reject(new Error("timeout")), timeoutMs)
         ),
       ]);
       return res.text ?? "";
@@ -227,6 +228,22 @@ async function callGemini(
       );
       if (i < tries - 1) await sleep(4000 * (i + 1));
     }
+  }
+  return null;
+}
+
+// Tries each model once, in order, and moves on at the first failure.
+async function callChain(
+  models: (string | undefined)[],
+  contents: string,
+  timeoutMs = 25000
+): Promise<string | null> {
+  const list = models.filter(
+    (m, i): m is string => !!m && models.indexOf(m) === i
+  );
+  for (const model of list) {
+    const text = await callGemini(model, contents, 1, timeoutMs);
+    if (text !== null) return text;
   }
   return null;
 }
@@ -249,14 +266,10 @@ type Score = {
 };
 
 async function generateCandidates(prompt: string): Promise<Candidate[] | null> {
-  let text = await callGemini(NAME_MODEL, prompt, 3);
-  if (text === null && NAME_MODEL !== MODEL) {
-    text = await callGemini(MODEL, prompt, 3);
-  }
-  const FALLBACK = process.env.GEMINI_FALLBACK_MODEL;
-  if (text === null && FALLBACK && FALLBACK !== MODEL && FALLBACK !== NAME_MODEL) {
-    text = await callGemini(FALLBACK, prompt, 2);
-  }
+  const text = await callChain(
+    [NAME_MODEL, MODEL, process.env.GEMINI_FALLBACK_MODEL],
+    prompt
+  );
   if (text === null) return null;
   const parsed = parseJson<Candidate[]>(text);
   return Array.isArray(parsed)
@@ -294,9 +307,9 @@ async function pickBest(
       .replace("{candidates}", () => list);
 
     // Try the critic model twice; if it stays overloaded, judge with the base model.
-    let text = await callGemini(CRITIC_MODEL, prompt, 2);
+    let text = await callGemini(CRITIC_MODEL, prompt, 1, 25000)
     if (text === null && CRITIC_MODEL !== MODEL) {
-      text = await callGemini(MODEL, prompt, 2);
+      text = await callGemini(MODEL, prompt, 1, 25000)
     }
     if (text === null) return fallback;
 
@@ -362,7 +375,7 @@ DESCRIPTION: ${description}
 INDUSTRY: ${industry || "Infer from the description."}
 KEYWORDS: ${keywords || "None"}
 USER-TYPED REGION: ${region || "None"}`,
-      3
+      1
     );
     if (briefText) {
       const parsedBrief = parseJson<unknown>(briefText);
