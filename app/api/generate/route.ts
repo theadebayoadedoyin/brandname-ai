@@ -269,7 +269,8 @@ type Score = {
 async function generateCandidates(prompt: string): Promise<Candidate[] | null> {
   const text = await callChain(
     [NAME_MODEL, MODEL, process.env.GEMINI_FALLBACK_MODEL],
-    prompt
+    prompt,
+    4500
   );
   if (text === null) return null;
   const parsed = parseJson<Candidate[]>(text);
