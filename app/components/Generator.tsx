@@ -24,7 +24,7 @@ export default function Generator() {
   useEffect(() => {
     if (!isLoading) return;
     setStep(0);
-    const t = setInterval(() => setStep((p) => (p < steps.length - 1 ? p + 1 : p)), 700);
+    const t = setInterval(() => setStep((p) => (p < steps.length - 1 ? p + 1 : p)), 3500);
     return () => clearInterval(t);
   }, [isLoading]);
 
@@ -32,14 +32,24 @@ export default function Generator() {
     e.preventDefault();
     if (!description.trim()) { setError("Describe your business first so the names fit it."); return; }
     setError(""); setShowResults(false); setIsLoading(true);
-    try {
-      const res = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ description, industry, keywords, region, level }) });
-      const data = await res.json();
-      if (!res.ok || data.error) { setError("The AI is busy right now. Try again in a moment."); return; }
-      setResults(JSON.parse(data.response) as BrandResult[]);
-      setShowResults(true);
-    } catch { setError("Something went wrong reading the results. Try again."); }
-    finally { setIsLoading(false); }
+    const body = JSON.stringify({ description, industry, keywords, region, level });
+    const attempt = async () => {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 110000);
+      try {
+        const res = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body, signal: ctrl.signal });
+        const data = await res.json();
+        if (!res.ok || data.error) return null;
+        return JSON.parse(data.response) as BrandResult[];
+      } catch { return null; } finally { clearTimeout(timer); }
+    };
+    // Retry once on our own, but only if the first try failed quickly.
+    const t0 = Date.now();
+    let out = await attempt();
+    if (!out && Date.now() - t0 < 70000) out = await attempt();
+    if (out) { setResults(out); setShowResults(true); }
+    else setError("Our AI is very busy right now. Please try again in a minute. Your details are still here.");
+    setIsLoading(false);
   }
 
   const label = "block text-base font-semibold";
@@ -52,7 +62,7 @@ export default function Generator() {
           <div className="w-full max-w-sm rounded-3xl border border-line bg-card p-7 shadow-2xl">
             <p className="font-display text-xl">LexioMark</p>
             <h2 className="mt-4 text-lg leading-relaxed">{steps[step]}</h2>
-            <p className="mt-2 text-sm text-muted">This usually takes a few seconds.</p>
+            <p className="mt-2 text-sm text-muted">This can take up to a minute. Thanks for waiting.</p>
             <div className="mt-6 h-1.5 overflow-hidden rounded-full bg-line">
               <div className="h-full rounded-full bg-accent transition-all duration-700" style={{ width: `${((step + 1) / steps.length) * 100}%` }} />
             </div>

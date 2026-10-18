@@ -253,6 +253,9 @@ async function generateCandidates(prompt: string): Promise<Candidate[] | null> {
   if (text === null && NAME_MODEL !== MODEL) {
     text = await callGemini(MODEL, prompt, 3);
   }
+  const FALLBACK = process.env.GEMINI_FALLBACK_MODEL;
+if (text === null && FALLBACK && FALLBACK !== MODEL && FALLBACK !== NAME_MODEL) {
+  text = await callGemini(FALLBACK, prompt, 2);
   if (text === null) return null;
   const parsed = parseJson<Candidate[]>(text);
   return Array.isArray(parsed)
@@ -329,7 +332,7 @@ async function pickBest(
   }
 }
 
-export async function POST(request: Request) {
+async function handle(request: Request) {
   try {
     const { description, industry, keywords, region, level } =
       await request.json();
@@ -497,4 +500,10 @@ USER-TYPED REGION: ${region || "None"}`,
       { status: 500 }
     );
   }
+}
+export async function POST(request: Request) {
+  const limit = new Promise<Response>((resolve) =>
+    setTimeout(() => resolve(Response.json({ error: "busy" }, { status: 503 })), 100000)
+  );
+  return Promise.race([handle(request), limit]);
 }
