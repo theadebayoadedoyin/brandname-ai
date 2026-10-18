@@ -215,7 +215,7 @@ async function callGemini(
           config: { responseMimeType: "application/json" },
         }),
         new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("timeout")), 25000)
+          setTimeout(() => reject(new Error("timeout")), 45000)
         ),
       ]);
       return res.text ?? "";
@@ -224,7 +224,7 @@ async function callGemini(
         `Gemini call failed (${model}, attempt ${i + 1}/${tries}):`,
         err instanceof Error ? err.message.slice(0, 160) : err
       );
-      if (i < tries - 1) await sleep(1500 * (i + 1));
+      if (i < tries - 1) await sleep(4000 * (i + 1));
     }
   }
   return null;
@@ -248,9 +248,9 @@ type Score = {
 };
 
 async function generateCandidates(prompt: string): Promise<Candidate[] | null> {
-  let text = await callGemini(NAME_MODEL, prompt, 2);
+  let text = await callGemini(NAME_MODEL, prompt, 3);
   if (text === null && NAME_MODEL !== MODEL) {
-    text = await callGemini(MODEL, prompt, 2);
+    text = await callGemini(MODEL, prompt, 3);
   }
   if (text === null) return null;
   const parsed = parseJson<Candidate[]>(text);
