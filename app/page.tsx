@@ -1,411 +1,90 @@
-"use client";
+import Hero from "./components/Hero";
+import Generator from "./components/Generator";
+import ThemeToggle from "./components/ThemeToggle";
+import { FAQ, SITE_URL } from "./site";
 
-import { useEffect, useState } from "react";
+const audiences: { t: string; d: string; s: string; img?: string }[] = [
+  { t: "Founders", d: "You have the product and the nerve. You need a name that holds up in a pitch. Describe the business once and get names with the reasoning attached.", img: "/cards/founders.webp", s: "bg-[#2E5DE6] text-white" },
+  { t: "Studios and freelancers", d: "Bring clients a naming direction, not a guess. Every name comes with the strategy behind it.", img: "/cards/studios.webp", s: "bg-[#071039] text-white dark:bg-[#0F2270]" },
+  { t: "Businesses rebranding", d: "Outgrown the old name? Test new directions against your audience and market before you tell anyone.", img: "/cards/rebranding.webp", s: "text-white" },
+  { t: "Creators", d: "Podcasts, newsletters, shops and channels. Get a name that is easy to say and easy to find.", img: "/cards/creators.webp", s: "text-white" },
+];
 
-import ResultCard, { BrandResult } from "./components/ResultCard";
+const steps = [
+  { t: "Describe your business", d: "Say what you do, who you serve and what sets you apart." },
+  { t: "Choose how literal the name is", d: "Direct, suggestive, conceptual or abstract. You decide how much the name explains." },
+  { t: "Get names with reasons", d: "Each name has its logic, personality traits, a .com and .co check, and trademark search links." },
+];
+
+const jsonLd = [
+  { "@context": "https://schema.org", "@type": "WebApplication", name: "LexioMark AI", url: SITE_URL, applicationCategory: "BusinessApplication", operatingSystem: "Web",
+    description: "AI brand name generator that returns strategic brand names with reasoning, domain checks and trademark search links." },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+];
+
 export default function Home() {
-  const words = ["Find", "Generate", "Create", "Discover"];
-
-  const loadingMessages = [
-    "Understanding your business...",
-    "Identifying your audience...",
-    "Analyzing your positioning...",
-    "Exploring strategic naming directions...",
-    "Crafting memorable brand names...",
-  ];
-
-  const [currentWord, setCurrentWord] = useState(0);
-
-  const [description, setDescription] = useState("");
-  const [keywords, setKeywords] = useState("");
-  const [industry, setIndustry] = useState("");
-
-  const [region, setRegion] = useState("");
-const [level, setLevel] = useState("Suggestive");
-
-  const [results, setResults] = useState<BrandResult[]>([]);
-
-  const [showResults, setShowResults] = useState(false);
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [loadingStep, setLoadingStep] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentWord((prev) => (prev + 1) % words.length);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    if (!isLoading) return;
-
-    setLoadingStep(0);
-
-    const interval = setInterval(() => {
-      setLoadingStep((prev) =>
-        prev < loadingMessages.length - 1 ? prev + 1 : prev
-      );
-    }, 700);
-
-    return () => clearInterval(interval);
-  }, [isLoading]);
-
   return (
-    <main className="min-h-screen overflow-x-hidden bg-white dark:bg-zinc-950 transition-colors">
-      {isLoading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-md">
-          <div className="w-full max-w-sm rounded-3xl bg-white p-7 shadow-2xl">
+    <main className="min-h-screen overflow-x-hidden">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-400">
-  LexioMark
-</p>
-            <p className="mt-2 text-center text-sm text-gray-500">
-  Please wait while we create strategic brand names.
-</p>
-<h2 className="mt-3 text-lg font-medium leading-relaxed text-gray-900">
-  {loadingMessages[loadingStep]}
-</h2>
-<p className="mt-4 text-sm text-gray-500">
-  This usually takes just a few seconds.
-</p>
-<div className="mt-6 h-1.5 overflow-hidden rounded-full bg-gray-200">
-              <div
-                className="h-full rounded-full bg-violet-600 transition-all duration-700"
-                style={{
-                  width: `${
-                    ((loadingStep + 1) / loadingMessages.length) * 100
-                  }%`,
-                }}
-              />
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+        <a href="/" className="font-display text-2xl">LexioMark</a>
+        <ThemeToggle />
+      </header>
+
+      <Hero />
+
+      <section className="mx-auto max-w-6xl px-6 py-20" aria-labelledby="who">
+        <h2 id="who" className="font-display text-4xl md:text-5xl">Who uses LexioMark</h2>
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {audiences.map((a) => (
+            <div key={a.t}
+              style={a.img ? { backgroundImage: `url(${a.img})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
+              className={`relative flex min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl p-6 ${a.s}`}>
+              {a.img && <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />}
+              <h3 className="relative text-xl font-medium drop-shadow">{a.t}</h3>
+              <p className={`relative text-sm leading-6 ${a.img ? "rounded-xl bg-black/30 p-3 text-white backdrop-blur-md" : "opacity-90"}`}>{a.d}</p>
             </div>
-          </div>
+          ))}
         </div>
-      )}
+      </section>
 
-      <div className="mx-auto max-w-5xl px-6 py-12 md:py-20">
-
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
-          LexioMark
-        </p>
-
-        <h1 className="mt-6 font-display text-4xl sm:text-5xl md:text-7xl break-words leading-tight tracking-tight text-gray-900 dark:text-white md:text-7xl">
-          <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-red-400 bg-clip-text text-transparent">
-            {words[currentWord]}
-          </span>{" "}
-          strategic brand names
-          <br />
-          people remember.
-        </h1>
-
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-300">
-          Describe your business and receive strategic brand names with
-          thoughtful explanations—not random AI suggestions.
-        </p>
-        <div className="mt-10">
-  <a
-    href="#generator"
-    className="inline-flex items-center rounded-xl bg-violet-600 px-8 py-4 text-lg font-semibold text-white transition hover:bg-violet-700"
-  >
-    Generate Brand Names
-  </a>
-</div>
-        <div className="mt-8 flex flex-wrap gap-8 text-sm text-gray-500 dark:text-gray-400">
-          <span> Strategic naming</span>
-          <span> Humane explanations</span>
-          <span> Built for founders</span>
+      <section id="how" className="border-y border-line bg-gradient-to-b from-transparent to-[#2E5DE6]/10 py-20" aria-labelledby="how-h">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 id="how-h" className="font-display text-4xl md:text-5xl">How it works</h2>
+          <ol className="mt-10 grid gap-8 md:grid-cols-3">
+            {steps.map((s, i) => (
+              <li key={s.t}>
+                <span className="font-display text-5xl text-accent">{i + 1}</span>
+                <h3 className="mt-3 text-xl font-semibold">{s.t}</h3>
+                <p className="mt-2 leading-7 text-muted">{s.d}</p>
+              </li>
+            ))}
+          </ol>
         </div>
-        <section className="mt-24">
-  <div className="text-center">
-    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">
-      Why LexioMark
-    </p>
+      </section>
 
-    <h2 className="mt-3 font-display text-4xl text-gray-900 dark:text-white">
-      Strategic naming,
-      <br />
-      built for founders.
-    </h2>
+      <section id="generator" className="mx-auto max-w-3xl scroll-mt-8 px-6 py-20" aria-labelledby="gen">
+        <h2 id="gen" className="mb-8 font-display text-4xl md:text-5xl">Generate your brand name</h2>
+        <Generator />
+      </section>
 
-    <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-300">
-      LexioMark doesn't generate random names.
-      It thinks like a brand strategist before making recommendations.
-    </p>
-  </div>
-
-  <div className="mt-14 grid gap-8 md:grid-cols-3">
-
-    <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-slate-900">
-      <div className="text-3xl">🧠</div>
-
-      <h3 className="mt-5 text-xl font-semibold text-gray-900 dark:text-white">
-        Strategic, not random
-      </h3>
-
-      <p className="mt-3 text-gray-600 dark:text-gray-300">
-        Every suggestion is generated from your business,
-        audience, positioning and industry.
-      </p>
-    </div>
-
-    <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-slate-900">
-      <div className="text-3xl">🎯</div>
-
-      <h3 className="mt-5 text-xl font-semibold text-gray-900 dark:text-white">
-        Built for founders
-      </h3>
-
-      <p className="mt-3 text-gray-600 dark:text-gray-300">
-        Designed for startups, creators,
-        agencies and ambitious businesses.
-      </p>
-    </div>
-
-    <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-slate-900">
-      <div className="text-3xl">✨</div>
-
-      <h3 className="mt-5 text-xl font-semibold text-gray-900 dark:text-white">
-        Every name has a story
-      </h3>
-
-      <p className="mt-3 text-gray-600 dark:text-gray-300">
-        Understand why every recommendation
-        works with thoughtful explanations and
-        personality traits.
-      </p>
-    </div>
-
-  </div>
-</section>
-        <div
-  id="generator"
-  className="mt-16 rounded-3xl border border-gray-200 bg-white p-6 md:p-10 shadow-xl dark:border-gray-700 dark:bg-slate-900"
->
-
-          <form className="space-y-8">
-          <div>
-              <div className="mb-3">
-                <label className="block text-base font-semibold text-gray-900 dark:text-white">
-                  Business Description
-                </label>
-
-                <p className="mt-1 text-sm leading-6 text-gray-500">
-                  Tell us what your business does, who it serves, and what
-                  makes it different.
-                </p>
-              </div>
-
-              <textarea
-  rows={5}
-  value={description}
-  onChange={(e) => setDescription(e.target.value)}
-  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 dark:bg-gray-800 dark:text-white focus:border-violet-500 focus:outline-none"
-  placeholder="e.g. We create premium Christian apparel that helps young believers wear their faith confidently."
-/>
-            </div>
-
-            <div>
-              <div className="mb-3">
-              <label className="block text-base font-semibold text-gray-900 dark:text-white">
-  Industry
-</label>
-
-                <p className="mt-1 text-sm leading-6 text-gray-500">
-                  Choose the industry your business belongs to.
-                </p>
-              </div>
-
-              <select
-  value={industry}
-  onChange={(e) => setIndustry(e.target.value)}
-  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 dark:bg-gray-800 dark:text-white focus:border-violet-500 focus:outline-none"
->
-<option value="">Select Industry</option>
-          <option value="Fashion">Fashion</option>
-          <option value="Law">Law</option>
-          <option value="Technology">Technology</option>
-          <option value="Healthcare">Healthcare</option>
-          <option value="Education">Education</option>
-          <option value="Creative Agency">Creative Agency</option>
-          <option value="Finance">Finance</option>
-          <option value="Hospitality">Hospitality</option>
-          <option value="Real Estate">Real Estate</option>
-          <option value="Food & Beverage">Food & Beverage</option>
-          <option value="Fitness & Wellness">Fitness & Wellness</option>
-          <option value="Agriculture & Agritech">Agriculture & Agritech</option>
-          <option value="E-commerce & Retail">E-commerce & Retail</option>
-          <option value="Logistics & Transportation">Logistics & Transportation</option>
-          <option value="Media & Entertainment">Media & Entertainment</option>
-          <option value="Beauty & Personal Care">Beauty & Personal Care</option>
-          <option value="Nonprofit & Faith-Based">Nonprofit & Faith-Based</option>
-          <option value="Consulting & Professional Services">Consulting & Professional Services</option>
-          <option value="Other">Other</option>
-</select>
-            </div>
-
-            <div>
-              <div className="mb-3">
-                <label className="block text-base font-semibold text-gray-900 dark:text-white">
-                  Keywords
-                  <span className="ml-1 font-normal text-gray-500 ">
-                    (Optional)
-                  </span>
-                </label>
-
-                <p className="mt-1 text-sm leading-6 text-gray-500">
-                  Separate keywords with commas.
-                </p>
-              </div>
-
-              <input
-  type="text"
-  value={keywords}
-  onChange={(e) => setKeywords(e.target.value)}
-  placeholder="Luxury, modern, bold..."
-  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 focus:border-violet-500 focus:outline-none"
-/>
-            </div>
-            <div>
-  <label className="block text-base font-semibold text-gray-900 dark:text-white">
-    Region <span className="font-normal text-gray-500">(Optional)</span>
-  </label>
-  <input type="text" value={region}
-    onChange={(e) => setRegion(e.target.value)}
-    placeholder="Country or region, e.g. Kenya"
-    className="mt-3 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 dark:bg-gray-800 dark:text-white focus:border-violet-500 focus:outline-none" />
-</div>
-
-<div>
-  <label className="block text-base font-semibold text-gray-900 dark:text-white">
-    How should the name relate to your business?
-  </label>
-  <select value={level} onChange={(e) => setLevel(e.target.value)}
-    className="mt-3 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 dark:bg-gray-800 dark:text-white focus:border-violet-500 focus:outline-none">
-    <option value="Direct">Direct: says what I do</option>
-    <option value="Suggestive">Suggestive: hints at what I do</option>
-    <option value="Conceptual">Conceptual: carries an idea or feeling</option>
-    <option value="Abstract">Abstract: distinctive, meaning built later</option>
-  </select>
-</div>
-            <button
-              type="button"
-              onClick={async () => {
-                setShowResults(false);
-                setIsLoading(true);
-
-                console.log({
-                  description,
-                  keywords,
-                });
-                
-                try {
-                  const response = await fetch("/api/generate", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      description,
-                      industry,
-                      keywords,
-                      region,
-                      level,
-                    })
-                  });
-              
-                  const data = await response.json();
-                  if (!response.ok || data.error) {
-                    alert("The AI is busy right now. Please try again in a moment.");
-                    return;
-                  }
-const parsed: BrandResult[] = JSON.parse(data.response);
-
-setResults(parsed);
-console.log(parsed);             
-                  console.log(data);
-              
-                
-              
-                  setShowResults(true);
-                } catch (error) {
-                  console.error(error);
-                } finally {
-                  setIsLoading(false);
-                }
-              }}
-              className="w-full rounded-xl bg-black py-4 text-lg font-semibold text-white transition duration-300 hover:scale-[1.01] hover:bg-gray-900"
-            >
-              Generate Strategic Names
-            </button>
-
-          </form>
+      <section className="mx-auto max-w-3xl px-6 pb-24" aria-labelledby="faq">
+        <h2 id="faq" className="font-display text-4xl">Questions founders ask</h2>
+        <div className="mt-8 divide-y divide-line border-y border-line">
+          {FAQ.map((f) => (
+            <details key={f.q} className="group py-5">
+              <summary className="cursor-pointer list-none text-lg font-semibold">{f.q}</summary>
+              <p className="mt-3 leading-7 text-muted">{f.a}</p>
+            </details>
+          ))}
         </div>
+      </section>
 
-        {showResults && (
-  <div className="mt-16 space-y-6">
-    <h2 className="font-display text-4xl text-gray-900 dark:text-white">
-  Suggested Brand Names
-</h2>
-
-<p className="mt-3 text-gray-600 dark:text-gray-300">
-  Here are strategic names generated for your business.
-</p>
-<div className="mt-6 rounded-2xl border border-violet-200 bg-violet-50 p-5 dark:border-violet-800 dark:bg-violet-950/30">
-  <p className="text-sm leading-6 text-violet-900 dark:text-violet-200">
-    <span className="font-semibold">A quick note on the domain flags below:</span>{" "}
-    a taken .com doesn&apos;t always mean a name is off-limits. Two businesses in
-    completely different industries can often use the same name without any real
-    conflict. The flags just mean &quot;worth a 2-minute manual search before you
-    commit&quot; — not &quot;don&apos;t use this.&quot;
-  </p>
-</div>
-    {results.map((result, index) => (
-      <ResultCard
-        key={index}
-        result={result}
-      />
-    ))}
-  </div>
-)}
-
-</div>
-<footer className="mt-28 border-t border-gray-200 bg-white py-16 dark:border-zinc-800 dark:bg-zinc-950 transition-colors">
-<div className="mt-12 flex flex-col items-center gap-4 border-t border-gray-200 pt-8 text-center dark:border-zinc-800">
-
-<p className="text-sm text-gray-500 dark:text-gray-400">
-Helping founders build memorable brands.
-</p>
-
-<div className="flex gap-6 text-sm">
-  <a
-    href="#"
-    className="text-gray-600 transition hover:text-violet-600 dark:text-gray-400 dark:hover:text-violet-400"
-  >
-    Privacy
-  </a>
-
-  <a
-    href="#"
-    className="text-gray-600 transition hover:text-violet-600 dark:text-gray-400 dark:hover:text-violet-400"
-  >
-    Terms
-  </a>
-
-  <a
-    href="#"
-    className="text-gray-600 transition hover:text-violet-600 dark:text-gray-400 dark:hover:text-violet-400"
-  >
-    Contact
-  </a>
-</div>
-
-<p className="text-xs text-gray-400">
-  © 2026 LexioMark · Designed & Built by Adebayo Adedoyin
-</p>
-
-</div>
-</footer>
-</main>
-);
+      <footer className="border-t border-line py-10 text-center text-sm text-muted">
+        <p>Helping founders build memorable brands.</p>
+        <p className="mt-2 text-xs">© 2026 LexioMark. Designed and built by Adebayo Adedoyin.</p>
+      </footer>
+    </main>
+  );
 }

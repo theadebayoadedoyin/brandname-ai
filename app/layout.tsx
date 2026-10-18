@@ -1,91 +1,40 @@
-import type { Metadata } from "next";
-import { Inter, DM_Serif_Display } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import "@fontsource-variable/geist";
+import "@fontsource-variable/bricolage-grotesque";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-});
-
-const dmSerif = DM_Serif_Display({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-dm-serif",
-});
+import { SITE_URL } from "./site";
 
 
+const TITLE = "AI Brand Name Generator for Founders | LexioMark";
+const DESC = "Generate strategic brand names with the reasoning behind each one. Includes .com and .co checks and trademark search links. Built for founders in Africa and beyond.";
 
 export const metadata: Metadata = {
-  title: "LexioMark | Generate Strategic Brand Names",
-
-  description:
-    "Generate memorable, strategic brand names with thoughtful explanations—not random AI suggestions. Built for founders, startups, and creators.",
-
-  metadataBase: new URL("https://brandname-ai-six.vercel.app"),
-
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: "%s | LexioMark" },
+  description: DESC,
   applicationName: "LexioMark",
-
-  keywords: [
-    "Brand Name Generator",
-    "AI Brand Naming",
-    "Startup Branding",
-    "Business Name Generator",
-    "Brand Strategy",
-    "Founders",
-  ],
-
-  authors: [
-    {
-      name: "Adebayo Adedoyin",
-    },
-  ],
-
+  alternates: { canonical: "/" },
+  authors: [{ name: "Adebayo Adedoyin" }],
   creator: "Adebayo Adedoyin",
-
-  robots: {
-    index: true,
-    follow: true,
-  },
-  
+  robots: { index: true, follow: true },
   openGraph: {
-    title: "LexioMark",
-    description:
-      "Generate memorable, strategic brand names with thoughtful AI explanations. Built for founders, startups and creators.",
-
-    url: "https://brandname-ai-six.vercel.app",
-    siteName: "LexioMark",
-
-    images: [
-      {
-        url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
-        alt: "LexioMark",
-      },
-    ],
-
-    type: "website",
+    title: TITLE, description: DESC, url: SITE_URL, siteName: "LexioMark", type: "website",
+    images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "LexioMark brand name generator" }],
   },
-
-  twitter: {
-    card: "summary_large_image",
-    title: "LexioMark",
-    description:
-      "Generate memorable, strategic brand names with thoughtful AI explanations.",
-    images: ["/opengraph-image.png"],
-  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESC, images: ["/opengraph-image.png"] },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#E6EDFD" }, { media: "(prefers-color-scheme: dark)", color: "#0b0b0c" }],
+};
+
+const themeScript = `try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}`;
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-  lang="en"
-  className={`${inter.className} ${dmSerif.variable} h-full antialiased`}
->
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" suppressHydrationWarning className="antialiased">
+      <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
+      <body className="flex min-h-screen flex-col">{children}</body>
     </html>
   );
 }

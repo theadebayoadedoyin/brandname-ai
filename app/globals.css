@@ -1,47 +1,53 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
-html {
-  scroll-behavior: smooth;
+:root{--bg:#E6EDFD;--fg:#071039;--muted:#41507f;--card:#ffffff;--line:#c5d2f5;--accent:#1A3BB0;--gold:#F2B84B}
+.dark{--bg:#0b0b0c;--fg:#f4f2ee;--muted:#a09da6;--card:#141416;--line:#26262a;--accent:#6E92F2}
+
+@theme inline{
+  --color-bg:var(--bg);--color-fg:var(--fg);--color-muted:var(--muted);
+  --color-card:var(--card);--color-line:var(--line);--color-accent:var(--accent);
+  --font-sans:"Geist Variable",system-ui,sans-serif;--font-display:"Bricolage Grotesque Variable","Geist Variable",system-ui,sans-serif;--color-gold:var(--gold);
 }
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+html{scroll-behavior:smooth}
+.font-display{font-weight:600;letter-spacing:-.02em}
+body{background:var(--bg);color:var(--fg);font-family:"Geist Variable",system-ui,sans-serif;transition:background-color .25s,color .25s}
+
+.field{@apply w-full rounded-xl border border-line bg-card px-4 py-3 text-fg placeholder:text-muted/60 focus:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 transition duration-200 focus:shadow-[0_0_0_4px_rgb(46_93_230/.2)]}
+
+/* Dark mode grain */
+.dark body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.08;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Hero: stacked slides crossfade with gaussian blur */
+.slide{opacity:0;filter:blur(14px);transform:scale(1.05);transition:opacity 1.1s ease,filter 1.1s ease,transform 1.6s ease}
+.slide[data-on="true"]{opacity:1;filter:blur(0);transform:scale(1)}
+
+/* Dark intro: hero starts blurred, sharpens on first pointer move or after ~1.2s */
+.dark .intro{transition:filter 1s ease,opacity 1s ease}
+.dark .intro[data-on="false"]{filter:blur(14px);opacity:.35}
+
+@media (prefers-reduced-motion:reduce){
+  .slide,.intro{transition:none!important}
+  .dark .intro[data-on="false"]{filter:none;opacity:1}
+  html{scroll-behavior:auto}
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-
-  transition:
-    background-color .25s ease,
-    color .25s ease;
-}
-
-.font-display{
-  font-family: var(--font-dm-serif);
-}
-
-@keyframes slideUp {
-  from{
-    opacity:0;
-    transform:translateY(40px);
-  }
-
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-.animate-\[slideUp_\.6s_ease-out\]{
-  animation:slideUp .6s ease-out;
-}
+/* Generator motion */
+@property --a{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes border-spin{to{--a:360deg}}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(34px,-24px)}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal[data-in="true"]{opacity:1;transform:none}
+.glow-card{border:1px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,conic-gradient(from var(--a),#2E5DE6,#F2B84B,#6E92F2,#2E5DE6) border-box}
+.blob{position:absolute;border-radius:9999px;filter:blur(80px);opacity:.3;animation:drift 12s ease-in-out infinite;pointer-events:none}
+.stagger>*{opacity:0}
+.reveal[data-in="true"] .stagger>*{animation:rise .6s ease forwards}
+.stagger>*:nth-child(2){animation-delay:.08s}.stagger>*:nth-child(3){animation-delay:.16s}.stagger>*:nth-child(4){animation-delay:.24s}
+.stagger>*:nth-child(5){animation-delay:.32s}.stagger>*:nth-child(6){animation-delay:.4s}.stagger>*:nth-child(7){animation-delay:.48s}
+.shine{position:relative;overflow:hidden}
+.shine::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s ease}
+.shine:hover::after{transform:translateX(120%)}
+@media (prefers-reduced-motion:reduce){.reveal,.stagger>*{opacity:1!important;transform:none!important;animation:none!important}.glow-card,.blob{animation:none}}
