@@ -83,7 +83,7 @@ Rules:
 - INVENTED PARTS: if any part of a name is not a real word or a real piece of a word (for example a made-up ending), set "confidence" to "low" and say in the reason that this part is invented for sound. Never present an invented part as having a meaning. This rule does NOT apply at the Abstract level, where every name is invented: keep confidence "high" there unless the word looks like a real word in a major language.
 - PERSONALITY: give 3 traits per name that are specific to THAT name. No trait may appear on more than 2 of the {count} names. Avoid overused words (Elegant, Sophisticated, Regal, Professional, Reliable, Secure) unless they truly fit.
 - REGION: when brief.region.value is set, at least 3 names must draw on that region's own languages, places or culture, not only Latin or Greek roots, and each of those reasons must say how. Follow the confidence and honesty rules for any local word.
-- LOCAL WORD SAFETY: for any local-language word, check how the name reads with tone marks removed and when spoken aloud. Reject it if it matches or resembles a vulgar, offensive or negative word in that language, or a common slang term. If you cannot be sure, set confidence to "low".
+- LOCAL WORD SAFETY: reject a local-language word only if, spoken aloud, it sounds like a vulgar, offensive or insulting word in everyday use. Ordinary homophones and shared meanings are fine, because context resolves them. If you are unsure of a word's meaning, set confidence to "low".
 - STYLE MIX: across the {count} names, no single style (for example Blend) may appear more than 3 times. Mix in other styles such as Suggestive, Geography-inspired, Founder-inspired or Abstract where they fit.
 - PLACE LIMITS: if a name is built from one town or state, say in its reason that it may limit growth beyond that place.
 - SENSE CHECK: before keeping a name, ask what a stranger would think it means. Reject it if it implies a different industry (for example a loan-sounding name for a law firm) or a wrong benefit.
@@ -128,7 +128,7 @@ For each name give integer scores from 1 to 10:
 Also give one "flag":
 - "known_brand": it is, or closely resembles, an existing brand, product or company in any industry
 - "wrong_industry": a stranger would guess a different industry or benefit
-- "unclear_meaning": confusing, or accidentally vulgar, offensive or negative in a major language or a Nigerian language, including when tone marks are dropped or the name looks like a slang word
+- "unclear_meaning": confusing, or likely to sound vulgar or insulting in a major language or a Nigerian language. Ordinary homophones do not count.
 - "off_level": breaks the chosen meaning level (for example product or industry words in a Conceptual name, or a real word in an Abstract name)
 - "false_meaning": claims an origin that is not really in the letters (for example saying a name comes from a place when its letters do not)
 - "generic": bland, template-like, an obvious common-word blend, or a plain dictionary word that will surely have its domain taken
